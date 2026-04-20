@@ -24,12 +24,12 @@ void printSortedValues(const vector<Item>& items) {
 // ------------------------------
 double findMedian(vector<int> values) {
     // TODO:
-    // 1. 將 values 由小到大排序
-    // 2. 取得資料筆數 n
-    // 3. 若 n 為奇數，回傳中間值
-    // 4. 若 n 為偶數，回傳中間兩個值的平均
-
-    return 0.0; // 請修改
+    sort(values.begin(), values.end());
+    int n = values.size();
+    if (n % 2 == 1) {
+        return values[n / 2];
+    }
+    return (values[n / 2 - 1] + values[n / 2]) / 2.0;
 }
 
 // ------------------------------
@@ -40,21 +40,23 @@ double findMedian(vector<int> values) {
 // ------------------------------
 int findWeightedMedian(vector<Item> items) {
     // TODO:
-    // 1. 將 items 依照 x 由小到大排序
-    //    可使用 sort 搭配 lambda
-    //
-    // 2. 呼叫 printSortedValues(items) 顯示排序結果
-    //
-    // 3. 設定 cumulativeWeight = 0.0
-    //
-    // 4. 逐一走訪排序後的 items：
-    //    - 累加目前權重 item.w
-    //    - 印出 x、w、cumulative
-    //    - 若 cumulativeWeight >= 0.5，回傳 item.x
-    //
-    // 5. 若最後仍未找到，回傳 -1
+    sort(items.begin(), items.end(), [](const Item& a, const Item& b) {
+        return a.x < b.x;
+    });
+    printSortedValues(items);
+    double cumulativeWeight = 0.0;
+    for (const auto& item : items) {
+        cumulativeWeight += item.w;
 
-    return -1; // 請修改
+        cout << "x = " << item.x
+             << ", w = " << fixed << setprecision(2) << item.w
+             << ", cumulative = " << cumulativeWeight << "\n";
+
+        if (cumulativeWeight >= 0.5) {
+            return item.x;
+        }
+    }
+    return -1;
 }
 
 int main() {
